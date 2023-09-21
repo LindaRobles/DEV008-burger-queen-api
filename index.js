@@ -11,6 +11,18 @@ const app = express();
 app.set('config', config);
 app.set('pkg', pkg);
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:8080/',{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.info('Connected to MongoDB');
+})
+.catch((err) => {
+  console.error('Error connecting to MongoDB:', err);
+});
+
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
