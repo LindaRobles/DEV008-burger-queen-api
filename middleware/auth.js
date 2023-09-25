@@ -19,22 +19,24 @@ module.exports = (secret) => (req, resp, next) => {
     }
 
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
+    req.decodedToken = decodedToken; // Guarda el token decodificado en el objeto de solicitud
+    next(); // Continua con siguiente middleware
   });
 };
 
 module.exports.isAuthenticated = (req) => (
   // TODO: decidir por la informacion del request si la usuaria esta autenticada
-  false
+  !!req.decodedToken
 );
 
 module.exports.isAdmin = (req) => (
   // TODO: decidir por la informacion del request si la usuaria es admin
-  false
-);
+  req.decodedToken.roles && req.decodedToken.roles.admin === true
+  );
 
 module.exports.requireAuth = (req, resp, next) => (
   (!module.exports.isAuthenticated(req))
-    ? next(401)
+    ? next(401)// Usuario no autenticado, devolver código 401 (No autorizado)
     : next()
 );
 

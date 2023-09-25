@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
+const usersModel = require('../models/usersModels.js');
+const bcrypt = require('bcrypt'); 
 
 const { secret } = config;
 
@@ -26,11 +28,31 @@ module.exports = (app, nextMain) => {
       return next(400);
     }
 
+    try {
+      const user = await usersModel.findOne({ email: email });
+      if (!user) {
+        throw 'Email does not exist';
+      }
 
-    // TODO: autenticar a la usuarix
-    // Hay que confirmar si el email y password
-    // coinciden con un user en la base de datos
-    // Si coinciden, manda un access token creado con jwt
+      if (!bcrypt.compareSync(password, user.password)) {
+        throw 'Incorrect password';
+      }
+
+      console.log('Usuario autenticado:', user);
+      console.log('Ingresaste satisfactoriamente');
+  
+      // TODO: autenticar al usuario y generar un token JWT
+      // Generar el token JWT
+      const token = jwt.sign({ userId: user._id, email: user.email }, secret, { expiresIn: '1h' });
+  
+      // Envía el token como respuesta
+      resp.status(200).json({ token: token });
+    } catch (error) {
+      console.error('Error de autenticación:', error);
+      return next(400);
+    }
+
+   
 
     next();
   });
