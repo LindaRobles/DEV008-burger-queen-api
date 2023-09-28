@@ -155,6 +155,7 @@ describe('POST /users', () => {
       body: {
         email: 'test1@test.test',
         password: '12345',
+        //role: 'admin',
         roles: { admin: false },
       },
     })

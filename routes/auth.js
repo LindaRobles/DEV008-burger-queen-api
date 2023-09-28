@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
-const usersModel = require('../models/usersModels.js');
+const { User } = require ('../models/usersModels.js');
 const bcrypt = require('bcrypt'); 
 
 const { secret } = config;
@@ -29,7 +29,7 @@ module.exports = (app, nextMain) => {
     }
 
     try {
-      const user = await usersModel.findOne({ email: email });
+      const user = await User.findOne({ email: email });
       if (!user) {
         throw 'Email does not exist';
       }
@@ -52,9 +52,6 @@ module.exports = (app, nextMain) => {
       return next(400);
     }
 
-   
-
-    next();
   });
 
   return nextMain();

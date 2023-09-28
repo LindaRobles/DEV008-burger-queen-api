@@ -19,7 +19,8 @@ const initAdminUser = async (app, next) => {
   const adminUser = {
     email: adminEmail,
     password: bcrypt.hashSync(adminPassword, 10),
-    roles: { admin: true },
+    role: 'admin',
+    /* roles: { admin: true }, */
   };
   const database = await connect();
   const users = database.collection('users');
@@ -92,7 +93,7 @@ module.exports = (app, next) => {
    * @code {401} si no hay cabecera de autenticación
    * @code {403} si no es ni admin
    */
-  app.get('/users', requireAdmin, getUsers);
+  app.get('/users', /* requireAdmin */ getUsers);
 
   /**
    * @name GET /users/:uid
