@@ -1,7 +1,10 @@
+const { getProducts } = require('../controller/productscontroller');
 const {
   requireAuth,
   requireAdmin,
 } = require('../middleware/auth');
+
+
 
 /** @module products */
 module.exports = (app, nextMain) => {
@@ -27,8 +30,8 @@ module.exports = (app, nextMain) => {
    * @code {200} si la autenticación es correcta
    * @code {401} si no hay cabecera de autenticación
    */
-  app.get('/products', requireAuth, (req, resp, next) => {
-  });
+  app.get('/products',/*  requireAuth, */ getProducts 
+  );
 
   /**
    * @name GET /products/:productId
