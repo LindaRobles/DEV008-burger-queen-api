@@ -1,3 +1,4 @@
+const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const { connect } = require('../connect.js'); 
 
@@ -8,7 +9,7 @@ const {
 
 const {
   getUsers,
-} = require('../controller/users');
+} = require('../controller/users.js');
 
 const initAdminUser = async (app, next) => {
   const { adminEmail, adminPassword } = app.get('config');
