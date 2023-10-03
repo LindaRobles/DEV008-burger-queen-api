@@ -21,6 +21,7 @@ const __e2e = {
   testUserCredentials: {
     email: 'test@test.test',
     password: '123456',
+    role: 'waiter'
   },
   testUserToken: null,
   childProcessPid: null,
@@ -30,8 +31,9 @@ const __e2e = {
   // testObjects: [],
 };
 
-const fetch = (url, opts = {}) => import('node-fetch')
-  .then(({ default: fetch }) => fetch(`${baseUrl}${url}`, {
+const fetch = (url, opts = {}) =>  {
+  console.log(`${baseUrl}${url}`);
+  return global.fetch(`${baseUrl}${url}`, {
     ...opts,
     headers: {
       'content-type': 'application/json',
@@ -42,8 +44,8 @@ const fetch = (url, opts = {}) => import('node-fetch')
         ? { body: JSON.stringify(opts.body) }
         : {}
     ),
-  }));
-
+  });
+}
 const fetchWithAuth = (token) => (url, opts = {}) => fetch(url, {
   ...opts,
   headers: {
@@ -146,6 +148,7 @@ module.exports = () => new Promise((resolve, reject) => {
       .then(resolve)
       .catch((err) => {
         console.log('there was an error');
+        console.error(err);
         kill(child.pid, 'SIGKILL', () => reject(err));
       })
     }).catch((error)=> console.log(error));
